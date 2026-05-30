@@ -1,16 +1,324 @@
-<!doctype html>
-<html>
+<!DOCTYPE html>
+<html lang="ko">
 <head>
-<meta charset="utf-8">
-<meta http-equiv="refresh" content="0; url=https://mcorpai.org/">
-<title>Redirecting...</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>머리 충격 응급 가이드</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
 
-<script>
-location.replace("https://mcorpai.org/");
-</script>
+  body {
+    font-family: 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
+    background: #0a0a0f;
+    color: #f0f0f0;
+    min-height: 100vh;
+    padding: 16px;
+  }
 
+  .header {
+    text-align: center;
+    padding: 20px 0 16px;
+    border-bottom: 2px solid #ff2d2d;
+    margin-bottom: 18px;
+  }
+
+  .header h1 {
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: #ffffff;
+    letter-spacing: -0.5px;
+  }
+
+  .header p {
+    font-size: 0.75rem;
+    color: #888;
+    margin-top: 4px;
+  }
+
+  /* 119 버튼 */
+  .call-btn {
+    display: block;
+    width: 100%;
+    background: #ff2d2d;
+    color: #fff;
+    text-align: center;
+    padding: 18px;
+    border-radius: 14px;
+    font-size: 1.5rem;
+    font-weight: 900;
+    text-decoration: none;
+    letter-spacing: 2px;
+    margin-bottom: 18px;
+    box-shadow: 0 4px 20px rgba(255,45,45,0.5);
+    animation: pulse 1.8s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { box-shadow: 0 4px 20px rgba(255,45,45,0.5); }
+    50% { box-shadow: 0 4px 35px rgba(255,45,45,0.9); }
+  }
+
+  /* 섹션 카드 */
+  .section {
+    border-radius: 14px;
+    padding: 16px;
+    margin-bottom: 14px;
+  }
+
+  .section-title {
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 20px;
+    font-size: 0.65rem;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+  }
+
+  /* 위험도별 색상 */
+  .level-critical {
+    background: rgba(255, 45, 45, 0.12);
+    border: 1.5px solid #ff2d2d;
+  }
+  .level-critical .section-title { color: #ff2d2d; }
+  .level-critical .badge { background: #ff2d2d; color: #fff; }
+
+  .level-urgent {
+    background: rgba(255, 140, 0, 0.12);
+    border: 1.5px solid #ff8c00;
+  }
+  .level-urgent .section-title { color: #ff8c00; }
+  .level-urgent .badge { background: #ff8c00; color: #fff; }
+
+  .level-watch {
+    background: rgba(255, 214, 0, 0.10);
+    border: 1.5px solid #ffd600;
+  }
+  .level-watch .section-title { color: #ffd600; }
+  .level-watch .badge { background: #ffd600; color: #000; }
+
+  /* 증상 항목 */
+  .symptom-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .symptom-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 0.88rem;
+    line-height: 1.4;
+  }
+
+  .dot-critical { color: #ff2d2d; font-size: 1.1rem; flex-shrink: 0; margin-top: 1px; }
+  .dot-urgent   { color: #ff8c00; font-size: 1.1rem; flex-shrink: 0; margin-top: 1px; }
+  .dot-watch    { color: #ffd600; font-size: 1.1rem; flex-shrink: 0; margin-top: 1px; }
+
+  .highlight-red { color: #ff5555; font-weight: 700; }
+
+  /* lucid interval 박스 */
+  .info-box {
+    background: rgba(255,45,45,0.07);
+    border-left: 3px solid #ff2d2d;
+    border-radius: 0 10px 10px 0;
+    padding: 12px 14px;
+    margin-top: 10px;
+    font-size: 0.82rem;
+    line-height: 1.6;
+    color: #ddd;
+  }
+
+  .info-box strong { color: #ff5555; }
+
+  /* 부위 설명 */
+  .anatomy-box {
+    background: rgba(255,255,255,0.05);
+    border: 1.5px solid #333;
+    border-radius: 14px;
+    padding: 14px 16px;
+    margin-bottom: 14px;
+    font-size: 0.82rem;
+    line-height: 1.7;
+    color: #ccc;
+  }
+
+  .anatomy-box .anatomy-title {
+    font-size: 0.78rem;
+    color: #888;
+    font-weight: 700;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+  }
+
+  .anatomy-row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 4px;
+    align-items: baseline;
+  }
+
+  .anatomy-label {
+    font-weight: 700;
+    min-width: 60px;
+    font-size: 0.83rem;
+  }
+
+  .safe   { color: #4caf50; }
+  .middle { color: #ffd600; }
+  .danger { color: #ff2d2d; }
+
+  /* 하단 경고 */
+  .footer-note {
+    text-align: center;
+    font-size: 0.72rem;
+    color: #555;
+    padding: 12px 0 8px;
+    line-height: 1.6;
+  }
+</style>
 </head>
 <body>
-Redirecting...
+
+<div class="header">
+  <h1>🧠 머리 충격 응급 가이드</h1>
+  <p>충격 후 이 증상이 있으면 즉시 확인하세요</p>
+</div>
+
+<!-- 119 버튼 -->
+<a href="tel:119" class="call-btn">📞 119 즉시 전화</a>
+
+<!-- 부위별 위험도 -->
+<div class="anatomy-box">
+  <div class="anatomy-title">📍 부위별 위험도</div>
+  <div class="anatomy-row">
+    <span class="anatomy-label safe">이마</span>
+    <span>두개골이 두꺼워 상대적으로 안전</span>
+  </div>
+  <div class="anatomy-row">
+    <span class="anatomy-label middle">뒤통수</span>
+    <span>중간 위험 — 소뇌 근접</span>
+  </div>
+  <div class="anatomy-row">
+    <span class="anatomy-label danger">관자놀이</span>
+    <span>⚠️ 가장 얇음 + 큰 혈관 바로 아래 → 최고 위험</span>
+  </div>
+</div>
+
+<!-- 즉시 119 -->
+<div class="section level-critical">
+  <div class="section-title">
+    🚨 <span>즉시 119</span>
+    <span class="badge">위험도 최상</span>
+  </div>
+  <ul class="symptom-list">
+    <li class="symptom-item">
+      <span class="dot-critical">●</span>
+      <span><span class="highlight-red">의식을 잃었거나</span> 잠깐이라도 기절한 경우</span>
+    </li>
+    <li class="symptom-item">
+      <span class="dot-critical">●</span>
+      <span><span class="highlight-red">한쪽 동공</span>이 다른 쪽보다 크게 커져 있을 때</span>
+    </li>
+    <li class="symptom-item">
+      <span class="dot-critical">●</span>
+      <span>귀·코에서 <span class="highlight-red">맑은 액체</span>가 흘러나올 때 (뇌척수액)</span>
+    </li>
+    <li class="symptom-item">
+      <span class="dot-critical">●</span>
+      <span><span class="highlight-red">경련·발작</span>이 일어날 때</span>
+    </li>
+    <li class="symptom-item">
+      <span class="dot-critical">●</span>
+      <span>말이 <span class="highlight-red">갑자기 어눌</span>해지거나 팔다리 힘이 빠질 때</span>
+    </li>
+    <li class="symptom-item">
+      <span class="dot-critical">●</span>
+      <span>심한 <span class="highlight-red">구토가 반복</span>될 때</span>
+    </li>
+  </ul>
+</div>
+
+<!-- 빨리 응급실 -->
+<div class="section level-urgent">
+  <div class="section-title">
+    ⚡ <span>빨리 응급실</span>
+    <span class="badge">위험도 높음</span>
+  </div>
+  <ul class="symptom-list">
+    <li class="symptom-item">
+      <span class="dot-urgent">●</span>
+      <span>멀쩡했다가 <span style="color:#ffaa44;font-weight:700">1~2시간 후 두통 심해질 때</span></span>
+    </li>
+    <li class="symptom-item">
+      <span class="dot-urgent">●</span>
+      <span>기억이 끊기거나 방금 일이 생각 안 날 때</span>
+    </li>
+    <li class="symptom-item">
+      <span class="dot-urgent">●</span>
+      <span>빛이 유독 눈부시게 느껴질 때</span>
+    </li>
+    <li class="symptom-item">
+      <span class="dot-urgent">●</span>
+      <span>어지럼증이 계속 지속될 때</span>
+    </li>
+    <li class="symptom-item">
+      <span class="dot-urgent">●</span>
+      <span>갑자기 이명(귀울림)이 생겼을 때</span>
+    </li>
+  </ul>
+
+  <div class="info-box">
+    ⚠️ <strong>Lucid Interval 경고</strong><br>
+    충격 후 멀쩡해 보여도 안심 금지.<br>
+    나타샤 리처드슨은 가볍게 넘어진 후 웃으며 일어났지만<br>
+    1시간 뒤 뇌사 상태가 됐습니다.<br>
+    <strong>머리 충격 후 최소 24시간은 혼자 있지 마세요.</strong>
+  </div>
+</div>
+
+<!-- 관찰 필요 -->
+<div class="section level-watch">
+  <div class="section-title">
+    👁 <span>관찰 필요</span>
+    <span class="badge">주의</span>
+  </div>
+  <ul class="symptom-list">
+    <li class="symptom-item">
+      <span class="dot-watch">●</span>
+      <span>충격 부위 외 두통이 지속될 때</span>
+    </li>
+    <li class="symptom-item">
+      <span class="dot-watch">●</span>
+      <span>멍하거나 집중이 잘 안 될 때</span>
+    </li>
+    <li class="symptom-item">
+      <span class="dot-watch">●</span>
+      <span>구역감(메스꺼움)이 느껴질 때</span>
+    </li>
+    <li class="symptom-item">
+      <span class="dot-watch">●</span>
+      <span>수면 중 깨기 어렵거나 과수면할 때</span>
+    </li>
+  </ul>
+</div>
+
+<div class="footer-note">
+  이마·앞뒤통수 충격 후 멍·혹만 생겼다면 상대적으로 양호<br>
+  단, 위 증상 하나라도 나타나면 즉시 병원으로
+</div>
+
 </body>
 </html>
