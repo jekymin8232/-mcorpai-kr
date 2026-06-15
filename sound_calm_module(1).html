@@ -1,0 +1,404 @@
+<!-- ===================================================================
+  소리로 진정하기 · 사운드 진정 모듈  V1.0  (Web Audio, 바닐라, 오프라인)
+  © 2026 Morgan J. (Gyu-min Jeon) | M-Corp Ethical AI
+  M-Corp 윤리적 AI 라이선스 (Hippocratic 3.0 파생 라이선스)
+  오직 민간·농업·인도주의 목적에 한해 사용 가능.
+
+  붙여넣기 방법:
+   1) 이 블록 전체를 기존 index.html의 #mcPanel 안(자기연민 카드 아래)이나,
+      "마음 진정" 모듈 다음 줄 어디에 통째로 붙여넣어도 됩니다.
+   2) 외부 라이브러리·서버·API 없음. 100% 오프라인. 데이터 미수집(메모리 전용).
+   3) 클래스/ID는 모두 snd- 접두사라 기존 mc- 모듈과 충돌하지 않습니다.
+
+  ※ 스피커폰/이어폰 토글의 의미(정직 고지):
+     웹페이지는 OS의 출력 장치(스피커↔이어폰)를 강제로 바꾸지 못합니다.
+     이 토글은 "지금 어느 기기로 듣는지"를 앱에 알려주는 스위치입니다.
+       - 스피커폰 = 모노(좌우 동일) 재생. 스피커로 자연스러움.
+       - 이어폰   = 좌우 다른 음(바이노럴 비트) 재생. 이어폰일 때만 의미 있음.
+     바이노럴 비트는 이완/불안 완화에 약한~중간 근거가 있을 뿐 치료가 아닙니다.
+==================================================================== -->
+
+<style>
+  .snd-enter-btn{
+    display:flex; align-items:center; justify-content:center; gap:8px;
+    width:100%; background:#1f4f6f; color:#fff;
+    text-align:center; padding:15px; border:none; border-radius:12px;
+    font-size:1.02rem; font-weight:900; letter-spacing:1px;
+    cursor:pointer; margin-bottom:16px; font-family:inherit; transition:background .2s;
+  }
+  .snd-enter-btn:hover{ background:#27668c; }
+  .snd-enter-btn .snd-arrow{ font-size:1.1rem; transition:transform .25s; }
+  .snd-enter-btn.snd-open .snd-arrow{ transform:rotate(180deg); }
+
+  .snd-panel{ display:none; margin-bottom:16px; }
+  .snd-panel.snd-show{ display:block; }
+
+  .snd-intro{
+    background:#14202b; border-left:3px solid #4aa3c9;
+    border-radius:0 10px 10px 0; padding:13px 14px; margin-bottom:14px;
+    font-size:1.18rem; line-height:1.7; color:#ddd;
+  }
+  .snd-intro b{ color:#4aa3c9; }
+
+  .snd-card{
+    background:#1c1f27; border:1.5px solid #3a3d47;
+    border-radius:12px; padding:15px 16px; margin-bottom:13px;
+  }
+  .snd-card-title{
+    font-size:1.05rem; font-weight:800; margin-bottom:6px;
+    display:flex; align-items:center; gap:8px; color:#fff;
+  }
+  .snd-card-sub{ font-size:1.08rem; color:#999; margin-bottom:12px; line-height:1.5; }
+
+  .snd-row{ display:flex; flex-wrap:wrap; gap:8px; align-items:center; }
+
+  .snd-btn{
+    background:#2a2d35; color:#f0f0f0; border:1px solid #444;
+    border-radius:9px; padding:9px 14px; font-size:1.15rem; font-weight:700;
+    cursor:pointer; font-family:inherit; transition:background .15s;
+  }
+  .snd-btn:hover{ background:#363a44; }
+  .snd-btn-accent{ background:#1f6f4a; border-color:#1f6f4a; color:#fff; }
+  .snd-btn-accent:hover{ background:#27855a; }
+  .snd-stop{ background:#5a2a2a; border-color:#7a3a3a; color:#fff; }
+  .snd-stop:hover{ background:#743636; }
+
+  /* 출력 모드 토글 */
+  .snd-mode{ flex:1; min-width:120px; text-align:center; }
+  .snd-mode.snd-mode-on{ background:#1f6f4a; border-color:#52c97a; color:#fff; }
+  .snd-mode-hint{ text-align:center; font-size:1.05rem; color:#52c97a; margin-top:10px; min-height:18px; }
+
+  .snd-vol-row{ display:flex; align-items:center; gap:10px; margin-top:14px; }
+  .snd-vol-label{ font-size:1.05rem; color:#aaa; font-weight:700; min-width:42px; }
+  .snd-range{ flex:1; width:100%; }
+
+  .snd-wave-time{ text-align:center; font-size:1.6rem; font-weight:900; color:#4aa3c9; margin:6px 0 2px; letter-spacing:2px; }
+  .snd-wave-hint{ text-align:center; font-size:1.08rem; color:#aaa; min-height:20px; margin-bottom:10px; }
+
+  .snd-breath-text{ text-align:center; font-size:1.2rem; font-weight:800; color:#52c97a; margin:6px 0 12px; min-height:24px; }
+
+  .snd-disclaimer{
+    text-align:center; font-size:1.04rem; color:#666;
+    line-height:1.7; padding:8px 0 2px; margin-top:6px;
+  }
+</style>
+
+
+<!-- ====== 진입 버튼 ====== -->
+<button type="button" class="snd-enter-btn" id="sndEnterBtn">
+  🔊 소리로 진정하기 <span class="snd-arrow">▾</span>
+</button>
+
+
+<!-- ====== 사운드 패널 ====== -->
+<div class="snd-panel" id="sndPanel">
+
+  <div class="snd-intro">
+    각성을 낮추고 잡념·충동을 <b>없애기보다 흘려보내도록</b> 돕는 소리 도구입니다.<br>
+    먼저 <b>지금 듣는 기기</b>를 골라주세요. 음량은 <b>낮게</b> 시작하길 권합니다.
+  </div>
+
+  <!-- 출력 방식 -->
+  <div class="snd-card">
+    <div class="snd-card-title">🎚️ 출력 방식 선택</div>
+    <div class="snd-card-sub">이어폰일 때만 좌우 다른 음(바이노럴)이 가능합니다. 스피커는 모노로 재생됩니다.</div>
+    <div class="snd-row">
+      <button type="button" class="snd-btn snd-mode snd-mode-on" id="sndModeSpeaker">🔊 스피커폰</button>
+      <button type="button" class="snd-btn snd-mode" id="sndModeEarphone">🎧 이어폰</button>
+    </div>
+    <div class="snd-mode-hint" id="sndModeHint">현재: 스피커폰 (모노 재생)</div>
+    <div class="snd-vol-row">
+      <span class="snd-vol-label">🔉 음량</span>
+      <input type="range" min="0" max="100" value="25" class="snd-range" id="sndVol">
+    </div>
+  </div>
+
+  <!-- 1. 충동 파도 사운드 -->
+  <div class="snd-card">
+    <div class="snd-card-title">🌊 충동 파도 사운드 (60초)</div>
+    <div class="snd-card-sub">낮은 음이 서서히 차올랐다가 정점을 지나 가라앉습니다. 충동도 이 소리처럼 반드시 지나간다는 신호로 함께 들어보세요.</div>
+    <div class="snd-wave-time" id="sndWaveTime">00:00</div>
+    <div class="snd-wave-hint" id="sndWaveHint">버튼을 누르면 파도가 시작됩니다</div>
+    <div class="snd-row" style="justify-content:center;">
+      <button type="button" class="snd-btn snd-btn-accent" id="sndWaveStart">파도 소리 시작</button>
+    </div>
+  </div>
+
+  <!-- 2. 브라운 노이즈 -->
+  <div class="snd-card">
+    <div class="snd-card-title">🌫️ 브라운 노이즈 그라운딩</div>
+    <div class="snd-card-sub">부드러운 배경 소리로 주변 소음과 잡념을 덮어 집중·이완을 돕습니다. (이완 보조이며 치료가 아닙니다)</div>
+    <div class="snd-row" style="justify-content:center;">
+      <button type="button" class="snd-btn snd-btn-accent" id="sndNoiseToggle">노이즈 켜기</button>
+    </div>
+  </div>
+
+  <!-- 3. 호흡 동기 톤 -->
+  <div class="snd-card">
+    <div class="snd-card-title">🫁 호흡 동기 톤 (4초 들숨 · 6초 날숨)</div>
+    <div class="snd-card-sub">음이 오르면 들이쉬고, 내려가면 길게 내쉬세요. 날숨이 길수록 부교감 신경이 활성화되어 몸이 진정됩니다.</div>
+    <div class="snd-breath-text" id="sndBreathText">준비</div>
+    <div class="snd-row" style="justify-content:center;">
+      <button type="button" class="snd-btn snd-btn-accent" id="sndBreathToggle">호흡 톤 시작</button>
+    </div>
+  </div>
+
+  <div class="snd-row" style="justify-content:center; margin-top:4px;">
+    <button type="button" class="snd-btn snd-stop" id="sndStopAll">■ 소리 전체 정지</button>
+  </div>
+
+  <div class="snd-disclaimer">
+    음량은 낮게 시작하세요(특히 이어폰 — 청력 보호).<br>
+    이완·그라운딩 보조 도구이며 전문 치료를 대체하지 않습니다. 필요할 때만 쓰고, 끝나면 꺼주세요.<br>
+    © 2026 Morgan J. (Gyu-min Jeon) | M-Corp Ethical AI · [mcorpai.org 공익 정보 제공]
+  </div>
+
+</div>
+
+
+<script>
+(function(){
+  "use strict";
+  var $ = function(id){ return document.getElementById(id); };
+
+  /* ===== 진입 토글 ===== */
+  var enterBtn = $('sndEnterBtn'), panel = $('sndPanel');
+  if(enterBtn && panel){
+    enterBtn.addEventListener('click', function(){
+      var open = panel.classList.toggle('snd-show');
+      enterBtn.classList.toggle('snd-open', open);
+      if(open){ setTimeout(function(){ panel.scrollIntoView({behavior:'smooth', block:'start'}); }, 60); }
+    });
+  }
+
+  /* ===== Web Audio 지원 확인 ===== */
+  var AC = window.AudioContext || window.webkitAudioContext;
+  if(!AC){
+    ['sndWaveStart','sndNoiseToggle','sndBreathToggle'].forEach(function(id){
+      var b=$(id); if(b){ b.disabled=true; }
+    });
+    if($('sndModeHint')) $('sndModeHint').textContent='이 브라우저는 오디오 생성을 지원하지 않습니다.';
+    return;
+  }
+
+  /* ===== 오디오 엔진 상태 ===== */
+  var ac=null, master=null;
+  var mode='speaker';        // 'speaker' | 'earphone'
+  var volume=0.15;           // 최종 마스터 게인 (청력 보호: 낮게 시작)
+  var active=null;           // 'wave' | 'noise' | 'breath' | null
+  var fNodes=[], fGain=null; // 현재 기능의 노드들과 엔벨로프 게인
+  var waveRAF=null, waveStartTs=0, breathTimer=null;
+
+  function ensureCtx(){
+    if(!ac){
+      ac = new AC();
+      master = ac.createGain();
+      master.gain.value = volume;
+      master.connect(ac.destination);
+    }
+    if(ac.state === 'suspended'){ ac.resume(); } /* iOS/모바일 제스처 해제 */
+  }
+
+  function fmt(sec){
+    var m=Math.floor(sec/60), s=Math.floor(sec%60);
+    return (m<10?'0':'')+m+':'+(s<10?'0':'')+s;
+  }
+
+  /* ===== 정리 / 정지 ===== */
+  function hardStopCurrent(){
+    if(waveRAF){ cancelAnimationFrame(waveRAF); waveRAF=null; }
+    if(breathTimer){ clearTimeout(breathTimer); breathTimer=null; }
+    if(fGain && ac){
+      var t=ac.currentTime, og=fGain, on=fNodes;
+      try{
+        og.gain.cancelScheduledValues(t);
+        og.gain.setValueAtTime(og.gain.value, t);
+        og.gain.linearRampToValueAtTime(0.0001, t+0.05);
+      }catch(e){}
+      fGain=null; fNodes=[];
+      setTimeout(function(){
+        on.forEach(function(n){ try{ if(n.stop) n.stop(); }catch(e){} try{ n.disconnect(); }catch(e){} });
+      }, 80);
+    } else {
+      fNodes.forEach(function(n){ try{ if(n.stop) n.stop(); }catch(e){} try{ n.disconnect(); }catch(e){} });
+      fNodes=[]; fGain=null;
+    }
+    active=null;
+  }
+
+  function resetLabels(){
+    if($('sndWaveStart'))   $('sndWaveStart').textContent='파도 소리 시작';
+    if($('sndNoiseToggle')) $('sndNoiseToggle').textContent='노이즈 켜기';
+    if($('sndBreathToggle'))$('sndBreathToggle').textContent='호흡 톤 시작';
+    if($('sndBreathText'))  $('sndBreathText').textContent='준비';
+  }
+
+  function stopAll(){
+    hardStopCurrent();
+    resetLabels();
+  }
+
+  /* ===== 공통 시작 래퍼 ===== */
+  function start(name, builder, onStarted){
+    ensureCtx();
+    hardStopCurrent();
+    resetLabels();
+    fGain = ac.createGain();
+    fGain.gain.value = 0.0001;
+    fGain.connect(master);
+    fNodes.push(fGain);
+    active = name;
+    builder(fGain);
+    if(onStarted) onStarted();
+  }
+
+  /* ===== 브라운 노이즈 버퍼 ===== */
+  function makeBrownBuffer(channels, seconds){
+    var len = Math.floor(ac.sampleRate*seconds);
+    var buf = ac.createBuffer(channels, len, ac.sampleRate);
+    for(var c=0;c<channels;c++){
+      var d=buf.getChannelData(c), last=0;
+      for(var i=0;i<len;i++){
+        var white=Math.random()*2-1;
+        last=(last+0.02*white)/1.02;
+        d[i]=last*3.5;
+      }
+    }
+    return buf;
+  }
+
+  /* ===== 1. 충동 파도 사운드 ===== */
+  function buildWave(g){
+    var dur=60, peak=0.9;
+    if(mode==='earphone'){
+      var merger=ac.createChannelMerger(2);
+      var oL=ac.createOscillator(), oR=ac.createOscillator();
+      oL.type='sine'; oR.type='sine';
+      oL.frequency.value=120; oR.frequency.value=124; /* 4Hz 바이노럴 */
+      oL.connect(merger,0,0); oR.connect(merger,0,1); merger.connect(g);
+      oL.start(); oR.start();
+      fNodes.push(oL,oR,merger);
+    } else {
+      var o=ac.createOscillator(); o.type='sine'; o.frequency.value=120;
+      o.connect(g); o.start(); fNodes.push(o);
+    }
+    var t=ac.currentTime;
+    g.gain.cancelScheduledValues(t);
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.linearRampToValueAtTime(peak, t+dur*0.4);   /* 차오름 */
+    g.gain.linearRampToValueAtTime(0.0001, t+dur);     /* 가라앉음 */
+
+    waveStartTs=performance.now();
+    (function tick(){
+      var el=(performance.now()-waveStartTs)/1000, p=el/dur;
+      if($('sndWaveTime')) $('sndWaveTime').textContent=fmt(el);
+      var h=$('sndWaveHint');
+      if(p<0.4){ if(h) h.textContent='차오르는 중… 그냥 지켜보세요'; }
+      else if(p<0.55){ if(h) h.textContent='정점을 지나는 중입니다'; }
+      else if(p<1){ if(h) h.textContent='가라앉고 있습니다…'; }
+      else {
+        if(h) h.textContent='파도가 지나갔습니다. 잘 견디셨어요.';
+        if($('sndWaveTime')) $('sndWaveTime').textContent=fmt(dur);
+        stopAll(); return;
+      }
+      waveRAF=requestAnimationFrame(tick);
+    })();
+  }
+  function startWave(){ start('wave', buildWave, function(){ $('sndWaveStart').textContent='파도 정지'; }); }
+
+  /* ===== 2. 브라운 노이즈 ===== */
+  function buildNoise(g){
+    var ch=(mode==='earphone')?2:1;
+    var src=ac.createBufferSource();
+    src.buffer=makeBrownBuffer(ch, 3);
+    src.loop=true; src.connect(g); src.start();
+    fNodes.push(src);
+    var t=ac.currentTime;
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.linearRampToValueAtTime(0.8, t+0.5);
+  }
+  function startNoise(){ start('noise', buildNoise, function(){ $('sndNoiseToggle').textContent='노이즈 끄기'; }); }
+
+  /* ===== 3. 호흡 동기 톤 ===== */
+  function buildBreath(g){
+    var oL=null, oR=null, o=null;
+    if(mode==='earphone'){
+      var merger=ac.createChannelMerger(2);
+      oL=ac.createOscillator(); oR=ac.createOscillator();
+      oL.type='sine'; oR.type='sine';
+      oL.frequency.value=200; oR.frequency.value=203;
+      oL.connect(merger,0,0); oR.connect(merger,0,1); merger.connect(g);
+      oL.start(); oR.start(); fNodes.push(oL,oR,merger);
+    } else {
+      o=ac.createOscillator(); o.type='sine'; o.frequency.value=200;
+      o.connect(g); o.start(); fNodes.push(o);
+    }
+    g.gain.setValueAtTime(0.0001, ac.currentTime);
+
+    function setFreq(target, secs){
+      var t=ac.currentTime;
+      if(mode==='earphone' && oL && oR){
+        oL.frequency.cancelScheduledValues(t); oL.frequency.setValueAtTime(oL.frequency.value,t);
+        oL.frequency.linearRampToValueAtTime(target, t+secs);
+        oR.frequency.cancelScheduledValues(t); oR.frequency.setValueAtTime(oR.frequency.value,t);
+        oR.frequency.linearRampToValueAtTime(target+3, t+secs);
+      } else if(o){
+        o.frequency.cancelScheduledValues(t); o.frequency.setValueAtTime(o.frequency.value,t);
+        o.frequency.linearRampToValueAtTime(target, t+secs);
+      }
+    }
+    function phase(inhale){
+      if(active!=='breath') return;
+      var t=ac.currentTime;
+      g.gain.cancelScheduledValues(t); g.gain.setValueAtTime(g.gain.value, t);
+      if(inhale){
+        if($('sndBreathText')) $('sndBreathText').textContent='들이쉬기 (4초) ↑';
+        g.gain.linearRampToValueAtTime(0.9, t+4);
+        setFreq(220, 4);
+        breathTimer=setTimeout(function(){ phase(false); }, 4000);
+      } else {
+        if($('sndBreathText')) $('sndBreathText').textContent='길게 내쉬기 (6초) ↓';
+        g.gain.linearRampToValueAtTime(0.06, t+6);
+        setFreq(180, 6);
+        breathTimer=setTimeout(function(){ phase(true); }, 6000);
+      }
+    }
+    phase(true);
+  }
+  function startBreath(){ start('breath', buildBreath, function(){ $('sndBreathToggle').textContent='호흡 톤 정지'; }); }
+
+  /* ===== 출력 모드 ===== */
+  function applyMode(m){
+    mode=m;
+    if($('sndModeSpeaker'))  $('sndModeSpeaker').classList.toggle('snd-mode-on', m==='speaker');
+    if($('sndModeEarphone')) $('sndModeEarphone').classList.toggle('snd-mode-on', m==='earphone');
+    if($('sndModeHint')) $('sndModeHint').textContent =
+      (m==='speaker') ? '현재: 스피커폰 (모노 재생)' : '현재: 이어폰 (좌우 다른 음·바이노럴)';
+    /* 재생 중이면 새 모드로 즉시 재시작 */
+    if(active==='wave') startWave();
+    else if(active==='noise') startNoise();
+    else if(active==='breath') startBreath();
+  }
+  if($('sndModeSpeaker'))  $('sndModeSpeaker').addEventListener('click', function(){ applyMode('speaker'); });
+  if($('sndModeEarphone')) $('sndModeEarphone').addEventListener('click', function(){ applyMode('earphone'); });
+
+  /* ===== 음량 ===== */
+  if($('sndVol')) $('sndVol').addEventListener('input', function(){
+    volume = (parseInt(this.value,10)/100)*0.6; /* 상한 0.6: 청력 보호 */
+    if(master && ac){ master.gain.setTargetAtTime(volume, ac.currentTime, 0.05); }
+  });
+
+  /* ===== 버튼 ===== */
+  if($('sndWaveStart')) $('sndWaveStart').addEventListener('click', function(){
+    if(active==='wave') stopAll(); else startWave();
+  });
+  if($('sndNoiseToggle')) $('sndNoiseToggle').addEventListener('click', function(){
+    if(active==='noise') stopAll(); else startNoise();
+  });
+  if($('sndBreathToggle')) $('sndBreathToggle').addEventListener('click', function(){
+    if(active==='breath') stopAll(); else startBreath();
+  });
+  if($('sndStopAll')) $('sndStopAll').addEventListener('click', function(){ stopAll(); });
+
+})();
+</script>
