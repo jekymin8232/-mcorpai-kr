@@ -173,4 +173,3 @@ Recompute procedure (conceptual): take the exact text between `>` and `</script>
 both the `-src` and `-src-elem` directives for that resource type. After writing the
 CSP, re-verify that the on-disk resource still hashes to the declared value.
 
-END OF CODE MAP
