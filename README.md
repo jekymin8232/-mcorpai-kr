@@ -29,7 +29,7 @@ To keep this repository organized and accessible, detailed information is strict
 * 🗺️ **[Security Audit Scope Map (V47_3_Audit_Scope_Map.md)](https://github.com/jekymin8232/vitalguardai-com/blob/main/V47_3_Audit_Scope_Map.md)**
   * *Read this first.* Contains the threat model, residual risks, and exact line ranges (approx. 1,856 lines) for the core security logic (WP1~WP7).
  
-  * * 🧭 **[Full Code Index (V47_3_Full_Code_index.md)](https://github.com/jekymin8232/vitalguardai-com/blob/main/V47_3_Full_Code_index.md)**
+* 🧭 **[Full Code Index (V47_3_Full_Code_index.md)](https://github.com/jekymin8232/vitalguardai-com/blob/main/V47_3_Full_Code_index.md)**
   * A complete physical table of contents and alphabetical identifier index for the 13,294-line source file.
 
 ### 2. For Partners, Governments & NGOs
