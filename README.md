@@ -1,4 +1,7 @@
-### Code audit   
+## What on earth is this code supposed to be used for?
+
+### 👉 [VISION.md](https://github.com/jekymin8232/vitalguardai-com/blob/main/VISION.md)
+
 # VitalGuard AI v4.7.3 — Full Code Index
 
 *A physical table of contents for `VitalGuard_AI_complete_V47_3.html`.*
