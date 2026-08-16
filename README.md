@@ -28,8 +28,6 @@ To keep this repository organized and accessible, detailed information is strict
 ### 1. For Security Auditors & Engineers
 * 🗺️ **[Security Audit Scope Map (V47_3_Audit_Scope_Map.md)](./V47_3_Audit_Scope_Map.md)**
   * *Read this first.* Contains the threat model, residual risks, and exact line ranges (approx. 1,856 lines) for the core security logic (WP1~WP7).
-* 🧭 **[Full Code Index (V47_3_Full_Code_index.md)](./V47_3_Full_Code_index.md)**
-  * A complete physical table of contents and alphabetical identifier index for the 13,294-line source file.
 
 ### 2. For Partners, Governments & NGOs
 * 🌍 **[Vision & Partnership Deck (VISION.md)](./VISION.md)**
