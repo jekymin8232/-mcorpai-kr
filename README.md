@@ -32,7 +32,7 @@ To keep this repository organized and accessible, detailed information is strict
 * 🧭 **[Full Code Index (V47_3_Full_Code_index.md)](https://github.com/jekymin8232/vitalguardai-com/blob/main/V47_3_Full_Code_index.md)**
   * A complete physical table of contents and alphabetical identifier index for the 13,294-line source file.
 
-### 2. For Partners, Governments & NGOs
+## 2. For Partners, Governments & NGOs
 * 🌍 **[Vision & Partnership Deck (VISION.md)](https://github.com/jekymin8232/vitalguardai-com/blob/main/VISION.md)**
   * Details on humanitarian deployments, Official Development Assistance (ODA) strategy, desert greening, offline early warning systems, and strategic investment opportunities.
 
