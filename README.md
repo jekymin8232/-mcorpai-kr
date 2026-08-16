@@ -1,4 +1,5 @@
-# 🛡️ VitalGuard AI v4.7.3
+# 🛡️ VitalGuard AI
+## This AI thrives where infrastructure doesn’t exist.
 
 **An offline-first, zero-dependency device protection framework for environments under strict information controls and network shutdowns.**
 
