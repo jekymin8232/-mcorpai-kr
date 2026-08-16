@@ -35,8 +35,6 @@ To keep this repository organized and accessible, detailed information is strict
 * 🌍 **[Vision & Partnership Deck (VISION.md)](https://github.com/jekymin8232/vitalguardai-com/blob/main/VISION.md)**
   * Details on humanitarian deployments, Official Development Assistance (ODA) strategy, desert greening, offline early warning systems, and strategic investment opportunities.
 
----
-
 ## 🔒 Verification & Integrity
 
 Because VitalGuard is a single HTML file, **byte-for-byte verification of the distributed file is the reproducibility check.** Do not trust the file without verifying its hash through an independent, trusted channel.
