@@ -1,6 +1,8 @@
 # 🛡️ VitalGuard AI
 ## This AI thrives where infrastructure doesn’t exist.
 
+**[Vision & Partnership Deck (VISION.md)](https://github.com/jekymin8232/vitalguardai-com/blob/main/VISION.md)**
+
 **An offline-first, zero-dependency device protection framework for environments under strict information controls and network shutdowns.**
 
 [![Status: OTF Security Lab Audit Completed](https://img.shields.io/badge/Status-OTF_Security_Lab_Audit_Completed-1a365d?style=for-the-badge\&logo=shield\&logoColor=white)](https://apply.opentech.fund/)
