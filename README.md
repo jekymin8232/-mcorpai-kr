@@ -50,8 +50,7 @@ b81c067f5523bc68728ae84f2fc93ce05077705ae4cb7e882f1c859885f47615
 
 ## ⚠️ Pre-Deployment Notice
 
-> **Distributing an unaudited security tool to people under surveillance is not a neutral act.**
-> This project is currently **Pre-Deployment**. It is undergoing evaluation by the USAGM Open Technology Fund (OTF) Security Lab. Until independent audits and remediation cycles are fully complete and published, this tool must not be distributed to or relied upon by individuals in high-risk environments. Accountability begins with independent code verification.
+> This project is currently in the pre-deployment stage, having completed an independent security audit and all required remediation procedures.
 
 ---
 
