@@ -3,7 +3,7 @@
 
 **An offline-first, zero-dependency device protection framework for environments under strict information controls and network shutdowns.**
 
-![Status: OTF Security Lab Audit Completed](https://img.shields.io/badge/Status-OTF_Security_Lab_Review-1a365d?style=for-the-badge&logo=shield&logoColor=white)
+![Status: OTF Security Lab Audit Completed](https://img.shields.io/badge/Status-OTF_Security_Lab_Audit_Completed-1a365d?style=for-the-badge&logo=shield&logoColor=white)
 ![100% Offline](https://img.shields.io/badge/Network-100%25_Offline-2ecc71?style=for-the-badge)
 ![Zero Dependency](https://img.shields.io/badge/Dependencies-0-orange?style=for-the-badge)
 ![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue?style=for-the-badge)
