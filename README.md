@@ -58,5 +58,7 @@ b81c067f5523bc68728ae84f2fc93ce05077705ae4cb7e882f1c859885f47615
 
 * **VitalGuard AI:** Copyright (c) 2026 Morgan J. (Gyu-min Jeon) — Licensed under the Apache License 2.0
 * **Embedded QR Generator:** Project Nayuki — MIT License.
+* Official Website: [mcorpai.com](http://mcorpai.com/)
+* Related Research Paper: [mcorpai.org](https://mcorpai.org/)
 
-*For inquiries, please contact: contact@mcorpai.org*
+For inquiries, please contact: contact@mcorpai.org
