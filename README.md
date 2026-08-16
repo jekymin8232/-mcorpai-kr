@@ -28,6 +28,9 @@ To keep this repository organized and accessible, detailed information is strict
 ### 1. For Security Auditors & Engineers
 * 🗺️ **[Security Audit Scope Map (V47_3_Audit_Scope_Map.md)](https://github.com/jekymin8232/vitalguardai-com/blob/main/V47_3_Audit_Scope_Map.md)**
   * *Read this first.* Contains the threat model, residual risks, and exact line ranges (approx. 1,856 lines) for the core security logic (WP1~WP7).
+ 
+  * * 🧭 **[Full Code Index (V47_3_Full_Code_index.md)](https://github.com/jekymin8232/vitalguardai-com/blob/main/V47_3_Full_Code_index.md)**
+  * A complete physical table of contents and alphabetical identifier index for the 13,294-line source file.
 
 ### 2. For Partners, Governments & NGOs
 * 🌍 **[Vision & Partnership Deck (VISION.md)](https://github.com/jekymin8232/vitalguardai-com/blob/main/VISION.md)**
@@ -43,3 +46,4 @@ Because VitalGuard is a single HTML file, **byte-for-byte verification of the di
 **SHA-256 Digest:**
 ```text
 b81c067f5523bc68728ae84f2fc93ce05077705ae4cb7e882f1c859885f47615
+
