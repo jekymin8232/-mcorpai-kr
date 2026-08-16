@@ -41,8 +41,9 @@ Because VitalGuard is a single HTML file, **byte-for-byte verification of the di
 
 **Target Artifact:** `VitalGuard_AI_complete_V47_3.html`
 **SHA-256 Digest:**
-```text
 b81c067f5523bc68728ae84f2fc93ce05077705ae4cb7e882f1c859885f47615
+
+---
 
 ## ⚠️ Pre-Deployment Notice
 
