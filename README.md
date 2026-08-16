@@ -26,11 +26,11 @@ It is **NOT** a circumvention tool (like a VPN) and does not restore access to t
 To keep this repository organized and accessible, detailed information is strictly separated by its intended audience. Please refer to the specific documents below:
 
 ### 1. For Security Auditors & Engineers
-* 🗺️ **[Security Audit Scope Map (V47_3_Audit_Scope_Map.md)](./V47_3_Audit_Scope_Map.md)**
+* 🗺️ **[Security Audit Scope Map (V47_3_Audit_Scope_Map.md)](https://github.com/jekymin8232/vitalguardai-com/blob/main/V47_3_Audit_Scope_Map.md)**
   * *Read this first.* Contains the threat model, residual risks, and exact line ranges (approx. 1,856 lines) for the core security logic (WP1~WP7).
 
 ### 2. For Partners, Governments & NGOs
-* 🌍 **[Vision & Partnership Deck (VISION.md)](./VISION.md)**
+* 🌍 **[Vision & Partnership Deck (VISION.md)](https://github.com/jekymin8232/vitalguardai-com/blob/main/VISION.md)**
   * Details on humanitarian deployments, Official Development Assistance (ODA) strategy, desert greening, offline early warning systems, and strategic investment opportunities.
 
 ---
