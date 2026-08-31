@@ -1,4 +1,4 @@
-### Code audit   
+### Diplomatic influence cannot be replaced by money. Diplomacy is about relationships between people.
 
 ### [VitalGuard_AI_complete_V47_3.html](https://github.com/jekymin8232/vitalguardai-com/blob/main/VitalGuard_AI_complete_V47_3.html)
 
